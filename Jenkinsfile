@@ -55,7 +55,7 @@ node {
 			}
 		}
 		catch (Exception e) {
-			error "${e}"
+			error "${e.getMessage()}"
 			//error "Unable to start services.Probably because something is running on port 80 or 8000."
 		}
 		finally {
