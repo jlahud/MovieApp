@@ -55,7 +55,8 @@ node {
 			}
 		}
 		catch (Exception e) {
-			error "Unable to start services.Probably because something is running on port 80 or 8000."
+			error "${e}"
+			//error "Unable to start services.Probably because something is running on port 80 or 8000."
 		}
 		finally {
 			sh "docker system prune -f"
