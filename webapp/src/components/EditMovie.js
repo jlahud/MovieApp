@@ -1,49 +1,51 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const AddMovie = ({ api, categories, addMovie }) => {
+const EditMovie = ({ movie, api, editMovie, categories }) => {
+  const [mov, setMov] = useState(movie);
   const [movieName, setMovieName] = useState("");
   const [movieRating, setMovieRating] = useState("1");
-  const [movieCategory, setMovieCategory] = useState("")
-  const [movieImage, setMovieImage] = useState("default.png")
+  const [movieCategory, setMovieCategory] = useState("");
+  const [movieImage, setMovieImage] = useState("default.png");
+  useEffect(() => {
+    setMov(movie);
+    setMovieName(movie.title);
+    setMovieRating(movie.rating);
+    setMovieCategory(movie.category);
+    setMovieImage(movie.image);
+  }, [movie]);
   const handleMovieChange = (e) => {
     setMovieName(e.target.value);
   };
   const handleRatingChange = (e) => {
-    setMovieRating(e.target.value)
-  }
+    setMovieRating(e.target.value);
+  };
   const handleCategoryChange = (e) => {
-    setMovieCategory(e.target.value)
-  }
+    setMovieCategory(e.target.value);
+  };
   const handleImageChange = async (e) => {
-      let file = e.target.files[0]
-      let data = new FormData()
-      data.append("file", file)
-      try {
+    let file = e.target.files[0];
+    let data = new FormData();
+    data.append("file", file);
+    try {
       const response = await axios.post(`${api}/upload`, data, {
-          headers: {
-              'Content-Type': 'multipart/form-data'
-          }
-      })
-      let filename = response.data.filename
-      document.getElementById('movieImage').src = `${api}/img/${filename}`
-      setMovieImage(filename)
-      } catch(err) {
-          console.log(err)
-      }
-  }
-  const handleSubmit = () => {
-    setMovieName('')
-    setMovieRating('1')
-    setMovieCategory('')
-    setMovieImage('default.png')
-  }
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      let filename = response.data.filename;
+      document.getElementById("movieEditImage").src = `${api}/img/${filename}`;
+      setMovieImage(filename);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <div id="movieModal" className="modal">
+    <div id="movieEditModal" className="modal">
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Add Movie</h5>
+            <h5 className="modal-title">Edit Movie</h5>
             <button
               type="button"
               className="close"
@@ -55,12 +57,20 @@ const AddMovie = ({ api, categories, addMovie }) => {
           </div>
           <div className="modal-body">
             <div className="form-group">
-                <input onChange={ handleImageChange } type="file" className="d-none" id="file"/>
-                <label htmlFor="file">
-                <img id="movieImage" src={`${api}/img/default.png`}
-                style={{ width: "30%", height: "120px", cursor: "pointer" }}
-                className="rounded mx-auto d-block border rounded-circle" />
-                </label>
+              <input
+                onChange={handleImageChange}
+                type="file"
+                className="d-none"
+                id="editfile"
+              />
+              <label htmlFor="editfile">
+                <img
+                  id="movieEditImage"
+                  src={`${api}/img/default.png`}
+                  style={{ width: "30%", height: "120px", cursor: "pointer" }}
+                  className="rounded mx-auto d-block border rounded-circle"
+                />
+              </label>
             </div>
             <div className="form-group">
               <label className="col-form-label">Movie Name</label>
@@ -90,12 +100,20 @@ const AddMovie = ({ api, categories, addMovie }) => {
             </div>
             <div className="form-group">
               <label className="col-form-label">Category</label>
-              <select value={ movieCategory } onChange={ (e) => { handleCategoryChange(e) } } className="custom-select">
+              <select
+                value={movieCategory}
+                onChange={(e) => {
+                  handleCategoryChange(e);
+                }}
+                className="custom-select"
+              >
                 <option hidden value="">
                   Category
                 </option>
                 {categories.map((category) => (
-                  <option key={ category.id } value={ category.name }>{ category.name }</option>
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -103,8 +121,13 @@ const AddMovie = ({ api, categories, addMovie }) => {
           <div className="modal-footer">
             <button
               onClick={() => {
-                addMovie(movieName, movieRating, movieImage, movieCategory);
-                handleSubmit();
+                editMovie(
+                  mov.id,
+                  movieName,
+                  movieRating,
+                  movieImage,
+                  movieCategory
+                );
               }}
               type="button"
               className="btn btn-primary"
@@ -126,4 +149,4 @@ const AddMovie = ({ api, categories, addMovie }) => {
   );
 };
 
-export default AddMovie;
+export default EditMovie;

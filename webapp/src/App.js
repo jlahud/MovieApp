@@ -4,6 +4,8 @@ import Categories from "./components/Categories";
 import AddCategory from "./components/AddCategory";
 import AddMovie from "./components/AddMovie";
 import Movies from "./components/Movies";
+import EditCategory from './components/EditCategory'
+import EditMovie from './components/EditMovie'
 import axios from "axios";
 
 const App = () => {
@@ -15,6 +17,8 @@ const App = () => {
   // States
   const [categories, setCategories] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [categoryEdit, setCategoryEdit] = useState("")
+  const [movieEdit, setMovieEdit] = useState("")
   // Onload Data
   useEffect(() => {
     getCategories();
@@ -54,7 +58,13 @@ const App = () => {
     } catch (err) { console.error(err) }
   };
   const editCategory = async (id, name) => {
-    console.log(id, name)
+    try {
+      const response = await axios.put(`${api}/categories/${id}`, {
+        'name': name
+      })
+      let tmp_categories = categories.filter(category => { category.id !== id })
+      setCategories([...tmp_categories, response.data])
+    } catch (err) { console.error(err) }
   }
   // Movies
   const getMovies = async () => {
@@ -87,7 +97,16 @@ const App = () => {
     } catch (err) { console.error(err) }
   }
   const editMovie = async (id, title, rating, image, category) => {
-    console.log(id, title, rating, image, category)
+    try {
+      const response = await axios.put(`${api}/movies/${id}`, {
+        'title': title,
+        'rating': rating,
+        'image': image,
+        'category': category
+      })
+      let tmp_movies = movies.filter(movie => { movie.id !== id })
+      setMovies([...tmp_movies, response.data])
+    } catch (err) { console.error(err) }
   }
 
   // UI Code
@@ -101,18 +120,33 @@ const App = () => {
     modal.toggleClass("fade");
     modal.modal("toggle");
   };
+  const openCategoryEditModal = (category) => {
+    setCategoryEdit(category)
+    let modal = $("#categoryEditModal");
+    modal.toggleClass("fade");
+    modal.modal("toggle");
+  };
+  const openMovieEditModal = (movie) => {
+    setMovieEdit(movie)
+    let modal = $("#movieEditModal");
+    modal.toggleClass("fade");
+    modal.modal("toggle");
+  };
 
   return (
     <div>
       <AddCategory addCategory={addCategory} />
       <AddMovie api={api} addMovie={addMovie} categories={categories} />
+      <EditCategory category={categoryEdit} editCategory={editCategory} />
+      <EditMovie movie={movieEdit} api={api} editMovie={editMovie} categories={categories} />
 
       <Navbar />
       <div className="row mt-5 ml-4">
-        <div className="col-12 col-lg-3 border-right">
+        <div className="col-12 col-lg-3 col-xl-2 pl-0 border-right">
           <div className="container">
             <h4 className="mb-4">Categories</h4>
             <Categories
+              openCategoryModal={openCategoryEditModal}
               deleteCategory={deleteCategory}
               categories={categories}
             />
@@ -146,10 +180,10 @@ const App = () => {
             )}
           </div>
         </div>
-        <div className="col-12 col-lg-8">
+        <div className="col-12 col-lg-9">
           <div className="container">
             <h4 className="mb-4">Movies</h4>
-            <Movies api={api} deleteMovie={deleteMovie} movies={movies} />
+            <Movies api={api} deleteMovie={deleteMovie} movies={movies} openMovieModal={openMovieEditModal} />
           </div>
         </div>
       </div>

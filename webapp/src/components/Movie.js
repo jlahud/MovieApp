@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Movie = ({ api, deleteMovie, movie }) => {
+const Movie = ({ api, deleteMovie, movie, openMovieModal }) => {
   const [stars, setStars] = useState([])
   useEffect(() => {
     let number_stars = Math.floor(movie.rating)
@@ -15,14 +15,22 @@ const Movie = ({ api, deleteMovie, movie }) => {
     setStars(tmp_stars)
   }, [])
   return (
-    <div className="col-12 card border-info mx-3 mb-3" style={{ maxWidth: "20rem" }}>
-      <div className="card-header d-flex justify-content-between">
+    <div className="col-12 card shadow mx-3 mb-3" style={{ maxWidth: "20rem" }}>
+      <div className="card-header bg-white d-flex justify-content-between">
           { movie.category }
+          <div>
+
+        <i
+            onClick={ () => { openMovieModal(movie) } }
+            className="fas fa-edit text-info lead mr-3"
+            style={{ cursor: "pointer" }}
+        ></i>
         <i
             onClick={ () => { deleteMovie(movie.id) } }
             className="fas fa-times text-danger lead"
             style={{ cursor: "pointer" }}
         ></i>
+          </div>
       </div>
       <img
         src={ `${api}/img/${movie.image}` }

@@ -6,7 +6,7 @@ const Navbar = () => {
       <div className="col">
         <a className="navbar-brand ml-5">
           <img
-            style={{ width: "140px", height: "100px" }}
+            style={{ width: "120px", height: "80px" }}
             src="/assets/img/logo1.png"
             alt="MovieApp"
           />
