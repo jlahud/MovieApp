@@ -5,6 +5,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 from run import create_app
+import json
 
 class MoviesTest(unittest.TestCase):
 
@@ -27,7 +28,7 @@ class MoviesTest(unittest.TestCase):
             'rating' : 8.2,
             'category' : 'Action'
         }
-        req = self.client().post(self.url,data=data)
+        req = self.client().post(self.url,data=json.dumps(data), content_type="application/json")
         self.assertEqual(req.status_code , 201)
 
     def test_put(self):
@@ -37,7 +38,7 @@ class MoviesTest(unittest.TestCase):
             'rating' : 9.5,
             'category' : 'Action'
         }
-        req = self.client().put(f'{self.url}/{self.id}',data=data)
+        req = self.client().put(f'{self.url}/{self.id}',data=json.dumps(data), content_type="application/json")
         self.assertEqual(req.status_code , 200)
 
     def test_delete(self):
