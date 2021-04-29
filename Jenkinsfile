@@ -20,7 +20,7 @@ node {
 				docker.image("mariadb:latest").inside("--link ${c.id}:db") {
             		sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
         		}
-				dir("restapi") {j
+				dir("restapi") {
 					withEnv(["DATABASE=${DB}","DBUSER=${USER}","PASSWORD=${PASS}"]){
 						sh "${PIPENV} run python tests/MoviesTest.py"
 						sh "${PIPENV} run python tests/CategoriesTest.py"
