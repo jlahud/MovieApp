@@ -35,7 +35,7 @@ const Movie = ({ api, deleteMovie, movie, openMovieModal }) => {
       <img
         src={ `${api}/img/${movie.image}` }
         className="mx-auto"
-        style={{ width: "80%", height: "250px" }}
+        style={{ width: "80%" }}
         alt={ movie.title }
       />
       <div className="card-body">
