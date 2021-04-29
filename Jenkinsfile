@@ -51,7 +51,7 @@ node {
 			def privateKey = "~/.ssh/private_key"
 			sh "scp -i ${privateKey} ${option} docker-compose.yaml .env ${remote}:~"
 			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose pull"
-			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose up -d"
+			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose up -d --no-build"
 		}
 		catch (Exception e) {
 			error "${e.getMessage()}"
