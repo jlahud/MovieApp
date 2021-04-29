@@ -20,7 +20,7 @@ node {
 				docker.image("mariadb:latest").inside("--link ${c.id}:db") {
             		sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
         		}
-				dir("restapi") {
+				dir("restapi") {j
 					withEnv(["DATABASE=${DB}","DBUSER=${USER}","PASSWORD=${PASS}"]){
 						sh "${PIPENV} run python tests/MoviesTest.py"
 						sh "${PIPENV} run python tests/CategoriesTest.py"
@@ -29,7 +29,7 @@ node {
 			}
 		}
 		catch (Exception e) {
-			error "Unable to launch tests.Probably because something is running on port 3306."
+			error "${e.getMessage()}"
 		}
 	}
 
@@ -46,18 +46,15 @@ node {
 
 	stage("Run") {
 		try {
-			//sshagent(["DevServer"]) {
 			def remote = "${params.remoteUser}@${params.remoteHost}"
 			def option = "-o StrictHostKeyChecking=no"
 			def privateKey = "~/.ssh/private_key"
 			sh "scp -i ${privateKey} ${option} docker-compose.yaml .env ${remote}:~"
 			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose pull"
 			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose up -d"
-			//}
 		}
 		catch (Exception e) {
 			error "${e.getMessage()}"
-			//error "Unable to start services.Probably because something is running on port 80 or 8000."
 		}
 		finally {
 			sh "docker system prune -f"

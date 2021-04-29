@@ -1,5 +1,3 @@
-
-
 from src.models import Database
 
 class Movie(Database):
@@ -20,7 +18,7 @@ class Movie(Database):
 
     def get_by_id(self,id):
         sql = '''
-            select m.id, m.title, m.image, m.rating, c.name
+            select m.id, m.title, m.image, m.rating, c.name as 'category'
             from movies m inner join categories c
             on m.category_id = c.id
             where m.id = %s;
@@ -85,7 +83,6 @@ class Movie(Database):
         return False
 
     def update(self,data):
-        title = data[0]
         category = data[3]
 
         category_id = self.get_category_id(category)

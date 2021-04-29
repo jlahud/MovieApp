@@ -1,4 +1,3 @@
-
 from src.models import Category
 from src.api import Api
 from flask import request
@@ -13,7 +12,7 @@ class Categories(Api):
     
     def sanitize_data(self):
         data = [
-            request.form['name'].lower().capitalize()
+            request.json['name'].lower().capitalize()
         ]
 
         return data

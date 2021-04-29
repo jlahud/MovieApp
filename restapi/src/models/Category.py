@@ -1,4 +1,3 @@
-
 from src.models import Database
 
 class Category(Database):
@@ -45,7 +44,6 @@ class Category(Database):
 
 
     def update(self,data):
-        name = data[0]
         sql = 'update categories set name = %s where id = %s;'
         try:
             self.cursor.execute(sql,data)

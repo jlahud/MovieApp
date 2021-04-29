@@ -1,4 +1,3 @@
-
 from src.models import Movie
 from src.api import Api
 from flask import request
@@ -15,10 +14,10 @@ class Movies(Api):
 
     def sanitize_data(self):
         data = [
-            request.form['title'].lower().capitalize(),
-            float( request.form['rating'] ),
-            request.form['image'].lower(),
-            request.form['category'].lower().capitalize()
+            request.json['title'].lower().capitalize(),
+            float( request.json['rating'] ),
+            request.json['image'].lower(),
+            request.json['category'].lower().capitalize()
         ]
 
         return data
@@ -29,12 +28,12 @@ class Movies(Api):
             self.model.delete()
             for file in listdir('img/'):
                 if valid_file(file):
-                    remove('img/'+file)
+                    remove(f'img/{file}')
         else:
             filename = self.model.delete_by_id(id)
             if filename != False:
-                if exists('img/'+filename):
+                if exists(f'img/{filename}'):
                     if valid_file(filename):
-                        remove('img/'+filename)
+                        remove(f'img/{filename}')
 
         return {} , 204

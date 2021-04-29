@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_restful import Api 
 from flask_cors import CORS
@@ -27,7 +26,7 @@ if __name__ == '__main__':
     app = create_app()
 
     host = '0.0.0.0'
-    port = 5000
+    port = 8000
     debug = True
     
     app.run(host,port,debug)

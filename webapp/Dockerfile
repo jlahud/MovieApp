@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm upgrade -g npm && npm upgrade -g yarn && yarn install 
+RUN npm upgrade -g npm && npm install
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD yarn start
+CMD npm start

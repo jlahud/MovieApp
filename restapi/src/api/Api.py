@@ -1,4 +1,3 @@
-
 from flask_restful import Resource
 from abc import ABC , abstractmethod
 
@@ -30,7 +29,7 @@ class Api(ABC,Resource,metaclass=FinalMeta):
         return self.model.get_by_id(id) , 201
     
     def delete(self,id=None):
-        filename = self.model.delete() if id is None else self.model.delete_by_id(id)
+        self.model.delete() if id is None else self.model.delete_by_id(id)
 
         return {} , 204
 

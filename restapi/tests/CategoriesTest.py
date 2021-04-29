@@ -1,4 +1,3 @@
-
 import unittest
 import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
@@ -13,12 +12,12 @@ class CategoriesTest(unittest.TestCase):
         app = create_app()
         self.client = app.test_client
         self.url = '/categories'
-        self.id = '/1'
+        self.id = 1
 
     def test_get(self):
         req = self.client().get(self.url)
         self.assertEqual(req.status_code , 200)
-        req = self.client().get(self.url+self.id)
+        req = self.client().get(f'{self.url}/{self.id}')
         self.assertEqual(req.status_code , 200)
 
     def test_post(self):
@@ -32,11 +31,11 @@ class CategoriesTest(unittest.TestCase):
         data = {
             'name' : 'Action'
         }
-        req = self.client().put(self.url+self.id,data=data)
+        req = self.client().put(f'{self.url}/{self.id}',data=data)
         self.assertEqual(req.status_code , 200)
 
     def test_delete(self):
-        req = self.client().delete(self.url+self.id)
+        req = self.client().delete(f'{self.url}/{self.id}')
         self.assertEqual(req.status_code , 204)
         req = self.client().delete(self.url)
         self.assertEqual(req.status_code , 204)

@@ -2,7 +2,7 @@
 from os import getenv 
 
 database = {
-    'HOST' : getenv('HOST','localhost'),
+    'HOST' : getenv('HOST'),
     'DBUSER' : getenv('DBUSER'),
     'PASSWORD' : getenv('PASSWORD'),
     'DATABASE' : getenv('DATABASE'),
