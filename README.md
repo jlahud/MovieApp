@@ -4,6 +4,7 @@
 * Technologies
 * Database Schema
 
+
 ## Description
 
 MovieApp is a small CRUD app that allows you to manage your movies.
