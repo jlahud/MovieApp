@@ -1,15 +1,12 @@
 node {
 	checkout scm
-	def PIPENV = "~/.local/bin/pipenv"
 
-	stage("Build") {
+	stage("Prepare Env & Test") {
+		def PIPENV = "~/.local/bin/pipenv"
 		dir("restapi") {
 			sh "pip3 install pipenv"
 			sh "${PIPENV} install"
 		}
-	}
-
-	stage("Test") {
 		def PORT = 3306
 		def ROOT = "secret_root"
 		def DB	 = "movieapp"
@@ -33,7 +30,7 @@ node {
 		}
 	}
 
-	stage("Deploy") {
+	stage("Docker Build & Deploy") {
 		docker.withRegistry("" , "DockerCreds") {
 			dir("restapi") {
 				docker.build("${params.registry}/restapi").push("latest")
@@ -44,20 +41,22 @@ node {
 		}
 	}
 
-	stage("Run") {
+	stage("Run Docker Compose") {
 		try {
-			def remote = "${params.remoteUser}@${params.remoteHost}"
-			def option = "-o StrictHostKeyChecking=no"
-			def privateKey = "~/.ssh/private_key"
-			sh "scp -i ${privateKey} ${option} docker-compose.yaml .env ${remote}:~"
-			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose pull"
-			sh "ssh -i ${privateKey} ${option} ${remote} docker-compose up -d --no-build"
+			def env = """
+			|registry = ${params.registry}
+      		|database_root_password = ${params.database_root_password}
+      		|database_name = ${params.database_name}
+      		|database_user = ${params.database_user}
+      		|database_password = ${params.database_password}
+			""".stripMargin()
+			writeFile file: ".env", text: env
+			def remote = "ssh://${params.remoteUser}@${params.remoteHost}"
+			sh "DOCKER_HOST='${remote}' docker-compose pull"
+			sh "DOCKER_HOST='${remote}' docker-compose --env .env up -d --no-build"
 		}
 		catch (Exception e) {
 			error "${e.getMessage()}"
-		}
-		finally {
-			sh "docker system prune -f"
 		}
 	}
 

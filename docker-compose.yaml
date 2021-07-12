@@ -2,9 +2,9 @@
 version: "3.8"
 services:
   api:
-    build: restapi/
-    image: "${registry}/restapi"
-    container_name: movie_api
+    build: api/
+    image: "${registry}/movie-app-api"
+    container_name: movie_app_api
     restart: always
     ports:
       - "8000:8000"
@@ -18,10 +18,10 @@ services:
       - backend
     volumes:
       - images:/app/img
-  web:
+  webapp:
     build: webapp/
-    image: "${registry}/webapp"
-    container_name: movie_app
+    image: "${registry}/movie-app-webapp"
+    container_name: movie_app_webapp
     ports:
       - "80:80"
   database:

@@ -2,9 +2,11 @@ FROM node:alpine
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json ./
 
-RUN npm upgrade -g npm && npm install
+RUN npm install --production
+
+COPY . .
 
 EXPOSE 3000
 

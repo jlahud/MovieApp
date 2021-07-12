@@ -3,6 +3,7 @@
 * Description
 * Technologies
 * Database Schema
+* Jenkins Setup
 
 
 ## Description
@@ -36,3 +37,14 @@ MovieApp is a small CRUD app that allows you to manage your movies.
 | image       | varchar(100) | no   |         | default.png |                |
 | rating      | float        | no   |         |             |                |
 | category_id | int          | no   | foreign |             |                |
+
+## Jenkins Setup
+
+You will need for Jenkins the following env variables.
+```bash
+registry -> string
+database_root_password -> secret
+databaase_name -> string
+database_user -> secret
+database_password -> secret
+```
