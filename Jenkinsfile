@@ -42,13 +42,20 @@ node {
 	}
 
 	stage("Run") {
-		try {
-			def env = """
+		/*
 			|registry=${params.registry}
       		|database_root_password=${params.database_root_password}
       		|database_name=${params.database_name}
       		|database_user=${params.database_user}
       		|database_password=${params.database_password}
+		*/
+		try {
+			def env = """
+			|database_name=movieapp
+			|database_root_password=secret_root
+			|database_user=movieapp
+			|database_password=secret_user
+			|registry=redalegzali
 			""".stripMargin()
 			writeFile file: ".env", text: env
 			def docker_host = "ssh://${params.remoteUser}@${params.remoteHost}"
