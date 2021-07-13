@@ -21,6 +21,7 @@ const App = () => {
   const [movieEdit, setMovieEdit] = useState("")
   // Onload Data
   useEffect(() => {
+    console.log(api)
     getCategories();
     getMovies();
   }, []);

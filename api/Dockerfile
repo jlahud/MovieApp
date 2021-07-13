@@ -2,9 +2,11 @@ FROM python:alpine
 
 WORKDIR /app
 
-COPY . .
+COPY Pipfile* ./
 
-RUN pip install --upgrade pip && pip install pipenv && pipenv install --system
+RUN pip install pipenv && pipenv install --system
+
+COPY . .
 
 EXPOSE 8000
 

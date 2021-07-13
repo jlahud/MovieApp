@@ -20,14 +20,17 @@ services:
       - backend
     volumes:
       - images:/app/img
-  #  webapp:
-  #    build: webapp/
-  #    image: "${registry}/movie-app-webapp"
-  #    container_name: movie_app_webapp
-  #    depends_on:
-  #      - api
-  #    ports:
-  #      - "80:80"
+  webapp:
+    build: 
+      context: webapp/
+      args: 
+        REACT_APP_API_PORT: 8000
+    image: "${registry}/movie-app-webapp"
+    container_name: movie_app_webapp
+    depends_on:
+      - api
+    ports:
+      - "80:80"
   database:
     image: mariadb
     restart: always

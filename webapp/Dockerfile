@@ -1,13 +1,26 @@
-FROM node:alpine 
+## Build Stage
+
+FROM node:alpine as build
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --production
+RUN npm install --production --silent
 
 COPY . .
 
-EXPOSE 3000
+ARG REACT_APP_API_PORT
+ENV REACT_APP_API_PORT=${REACT_APP_API_PORT}
 
-CMD npm start
+RUN npm run build
+
+## Production Stage 
+
+FROM nginx:alpine
+
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
