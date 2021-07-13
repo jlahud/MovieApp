@@ -1,7 +1,7 @@
 node {
 	checkout scm
 
-	stage("Prepare Env & Test") {
+	stage("Unit Tests") {
 		def PIPENV = "~/.local/bin/pipenv"
 		dir("api") {
 			sh "pip3 install pipenv"
@@ -30,7 +30,7 @@ node {
 		}
 	}
 
-	stage("Docker Build & Deploy") {
+	stage("Build & Deploy") {
 		docker.withRegistry("" , "DockerCreds") {
 			dir("api") {
 				docker.build("${params.registry}/movie-app-api").push("latest")
@@ -41,7 +41,7 @@ node {
 		}
 	}
 
-	stage("Docker Compose Run") {
+	stage("Run") {
 		try {
 			def env = """
 			|registry = ${params.registry}
