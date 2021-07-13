@@ -41,7 +41,7 @@ node {
 		}
 	}
 
-	stage("Run Docker Compose") {
+	stage("Docker Compose Run") {
 		try {
 			def env = """
 			|registry = ${params.registry}
@@ -51,9 +51,9 @@ node {
       		|database_password = ${params.database_password}
 			""".stripMargin()
 			writeFile file: ".env", text: env
-			def remote = "ssh://${params.remoteUser}@${params.remoteHost}"
-			sh "DOCKER_HOST='${remote}' docker-compose pull"
-			sh "DOCKER_HOST='${remote}' docker-compose --env .env up -d --no-build"
+			def docker_host = "ssh://${params.remoteUser}@${params.remoteHost}"
+			sh "DOCKER_HOST=${docker_host} docker-compose pull"
+			sh "DOCKER_HOST=${docker_host} docker-compose up -d --no-build"
 		}
 		catch (Exception e) {
 			error "${e.getMessage()}"
