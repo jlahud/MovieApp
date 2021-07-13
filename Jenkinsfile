@@ -3,7 +3,7 @@ node {
 
 	stage("Prepare Env & Test") {
 		def PIPENV = "~/.local/bin/pipenv"
-		dir("restapi") {
+		dir("api") {
 			sh "pip3 install pipenv"
 			sh "${PIPENV} install"
 		}
@@ -17,7 +17,7 @@ node {
 				docker.image("mariadb:latest").inside("--link ${c.id}:db") {
             		sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
         		}
-				dir("restapi") {
+				dir("api") {
 					withEnv(["DATABASE=${DB}","DBUSER=${USER}","PASSWORD=${PASS}"]){
 						sh "${PIPENV} run python tests/MoviesTest.py"
 						sh "${PIPENV} run python tests/CategoriesTest.py"
@@ -32,11 +32,11 @@ node {
 
 	stage("Docker Build & Deploy") {
 		docker.withRegistry("" , "DockerCreds") {
-			dir("restapi") {
-				docker.build("${params.registry}/restapi").push("latest")
+			dir("api") {
+				docker.build("${params.registry}/movie-app-api").push("latest")
 			}
 			dir("webapp") {
-				docker.build("${params.registry}/webapp").push("latest")
+				docker.build("${params.registry}/movie-app-webapp").push("latest")
 			}
 		}
 	}

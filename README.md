@@ -43,8 +43,8 @@ MovieApp is a small CRUD app that allows you to manage your movies.
 You will need for Jenkins the following env variables.
 ```bash
 registry -> string
-database_root_password -> secret
+database_root_password -> password
 databaase_name -> string
-database_user -> secret
-database_password -> secret
+database_user -> string
+database_password -> password
 ```
