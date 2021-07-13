@@ -6,6 +6,8 @@ services:
     image: "${registry}/movie-app-api"
     container_name: movie_app_api
     restart: always
+    depends_on:
+      - database
     ports:
       - "8000:8000"
     environment:
@@ -18,16 +20,18 @@ services:
       - backend
     volumes:
       - images:/app/img
-  webapp:
-    build: webapp/
-    image: "${registry}/movie-app-webapp"
-    container_name: movie_app_webapp
-    ports:
-      - "80:80"
+  #  webapp:
+  #    build: webapp/
+  #    image: "${registry}/movie-app-webapp"
+  #    container_name: movie_app_webapp
+  #    depends_on:
+  #      - api
+  #    ports:
+  #      - "80:80"
   database:
     image: mariadb
     restart: always
-    container_name: movie_db
+    container_name: movie_app_db
     environment:
       - MYSQL_ROOT_PASSWORD=${database_root_password}
       - MYSQL_DATABASE=${database_name}
