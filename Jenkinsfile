@@ -31,6 +31,15 @@ node {
 	}
 
 	stage("Build & Deploy") {
+		def env = """
+		|registry=${params.registry}
+		|database_root_password=${params.database_root_password}
+		|database_name=${params.database_name}
+		|database_user=${params.database_user}
+		|database_password=${params.database_password}
+		""".stripMargin()
+		writeFile file: ".env", text: env
+		sh "docker-compose build"
 		docker.withRegistry("" , "DockerCreds") {
 			dir("api") {
 				docker.build("${params.registry}/movie-app-api").push("latest")
@@ -43,14 +52,6 @@ node {
 
 	stage("Run") {
 		try {
-			def env = """
-			|registry=${params.registry}
-      		|database_root_password=${params.database_root_password}
-      		|database_name=${params.database_name}
-      		|database_user=${params.database_user}
-      		|database_password=${params.database_password}
-			""".stripMargin()
-			writeFile file: ".env", text: env
 			def docker_host = "ssh://${params.remoteUser}@${params.remoteHost}"
 			sh "DOCKER_HOST=${docker_host} docker-compose pull"
 			sh "DOCKER_HOST=${docker_host} docker-compose up -d --no-build"

@@ -10,7 +10,7 @@ RUN npm install --production --silent
 
 COPY . .
 
-ARG REACT_APP_API_PORT
+ARG REACT_APP_API_PORT=8000
 ENV REACT_APP_API_PORT=${REACT_APP_API_PORT}
 
 RUN npm run build
