@@ -1,12 +1,15 @@
 node {
 	checkout scm
+	def PIPENV = "~/.local/bin/pipenv"
 
-	stage("Unit Tests") {
-		def PIPENV = "~/.local/bin/pipenv"
+	stage("Build") {
 		dir("api") {
 			sh "pip3 install pipenv"
 			sh "${PIPENV} install"
 		}
+	}
+
+	stage("Unit Tests") {
 		def PORT = 3306
 		def ROOT = "secret_root"
 		def DB	 = "movieapp"
@@ -30,7 +33,7 @@ node {
 		}
 	}
 
-	stage("Build & Deploy") {
+	stage("Deploy") {
 		def env = """
 		|registry=${params.registry}
 		|database_root_password=${params.database_root_password}
