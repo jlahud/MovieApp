@@ -46,7 +46,7 @@ remoteUser -> string
 remoteHost -> string ( IP Address )
 registry -> string
 database_root_password -> password
-databaase_name -> string
+database_name -> string
 database_user -> string
 database_password -> password
 ```
