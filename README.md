@@ -5,8 +5,6 @@
 * Database Schema
 * Jenkins Setup
 
-:warning: **If you come here from the HackerNoon blog post, it's currently on maintenance and will be changed soon to match these repositories versions**
-
 ## Description
 
 MovieApp is a small CRUD app that allows you to manage your movies.
