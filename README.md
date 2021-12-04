@@ -12,11 +12,11 @@ MovieApp is a small CRUD app that allows you to manage your movies.
 ## Technologies
 
 * Front End
-	* React
+  * React
 * Back End 
-	* Flask RESTful
+  * Flask RESTful
 * Database
-	* MariaDB
+  * MariaDB
 
 ## Database Schema
 
